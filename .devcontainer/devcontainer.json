@@ -1,20 +1,22 @@
 {
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "remoteUser": "vscode",
   "features": {
-    "azure-cli": "latest",
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "lts"
+    "ghcr.io/devcontainers/features/azure-cli": "latest",
+    "ghcr.io/devcontainers/features/node": {
+      "version": "20"
     },
-    "ghcr.io/devcontainers/features/dotnet:latest": {
+    "ghcr.io/devcontainers/features/dotnet": {
       "version": "10.0"
     }
   },
   "hostRequirements": {
     "cpus": 4
   },
-  "waitFor": "onCreateCommand",
-  "updateContentCommand": "python3 -m pip install -r requirements.txt",
-  "postCreateCommand": "",
+  "onCreateCommand": "python3 -m pip install --upgrade pip setuptools wheel && python3 -m pip install -r requirements.txt",
+  "updateContentCommand": "python3 -m pip install --upgrade pip setuptools wheel && python3 -m pip install -r requirements.txt",
+  "postCreateCommand": "python3 -m ipykernel install --user --name python312 --display-name 'Python 3.12'",
+  "mounts": [],
   "customizations": {
     "codespaces": {
       "openFiles": []
@@ -23,7 +25,7 @@
       "extensions": [
         "ms-toolsai.jupyter",
         "ms-python.python",
-        "ms-dotnettools.dotnet-interactive-vscode"
+        "ms-dotnettools.csdevkit"
       ]
     }
   }
