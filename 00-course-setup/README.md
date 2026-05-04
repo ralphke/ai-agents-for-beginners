@@ -4,12 +4,9 @@
 
 This lesson will cover how to run the code samples of this course.
 
-## Requirements
+## Join Other Learners and Get Help
 
-- A GitHub Account
-- Python 3.12+
-- Azure Subscription
-- Azure AI Foundry Account
+Before you begin cloning your repo, join the [AI Agents For Beginners Discord channel](https://aka.ms/ai-agents/discord) to get any help with setup, any questions about the course, or to connect with other learners.
 
 ## Clone or Fork this Repo
 
@@ -21,98 +18,310 @@ You should now have your own forked version of this course in the following link
 
 ![Forked Repo](./images/forked-repo.png)
 
-## Retrieve Your GitHub Personal Access Token (PAT)
+### Shallow Clone (recommended for workshop / Codespaces)
 
-Currently, this course uses the Github Models Marketplace to offer free access to Large Language Models (LLMs) that will be used to create AI Agents.
+  >The full repository can be large (~3 GB) when you download full history and all files. If you're only attending the workshop or only need a few lesson folders, a shallow clone (or a sparse clone) avoids most of that download by truncating history and/or skipping blobs.
 
-To access this service, you will need to create a GitHub Personal Access Token.
+#### Quick shallow clone — minimal history, all files
 
-This can be done by going to your <a href="https://github.com/settings/personal-access-tokens" target="_blank">Personal Access Tokens settings</a> in your GitHub Account.
+Replace `<your-username>` in the below commands with your fork URL (or the upstream URL if you prefer).
 
-Select the `Fine-grained tokens` option on the left side of your screen.
+To clone only the latest commit history (small download):
 
-Then select `Generate new token`.
-
-![Generate Token](./images/generate-token.png)
-
-Copy your new token that you have just created. You will now add this to your `.env` file included in this course. 
-
-## Add this to your Environment Variables
-
-To create your `.env` file run the following command in your terminal:
-
-```bash
-cp .env.example .env
+```bash|powershell
+git clone --depth 1 https://github.com/<your-username>/ai-agents-for-beginners.git
 ```
 
-This will copy the example file and create a `.env` in your directory, fill in the values for the environment variables. You can locate the values for each environment variable in the following locations of the [Azure AI Foundry](https://ai.azure.com?WT.mc_id=academic-105485-koreyst) portal:
+To clone a specific branch:
 
-Open that file and paste the token you created into the `GITHUB_TOKEN=` field of the .env file. 
-- `AZURE_SUBSCRIPTION_ID` - On the **Overview** page of your project within **Project details**.
-- `AZURE_AI_PROJECT_NAME` - At the top of the **Overview** page for your project.
-- `AZURE_OPENAI_RESOURCE_GROUP` - On the **Overview** page of the **Management Center** within **Project properties**.
-- `AZURE_OPENAI_SERVICE` - On the **Overview** page of your project in the **Included capabilities** tab for **Azure OpenAI Service**.
-- `AZURE_OPENAI_API_VERSION` - On the [API version lifecycle](https://learn.microsoft.com/azure/ai-services/openai/api-version-deprecation#latest-ga-api-release?WT.mc_id=academic-105485-koreyst) webpage within the **Latest GA API release** section.
-- `AZURE_OPENAI_ENDPOINT` - On the **Details** tab of your model deployment within **Endpoint** (i.e. **Target URI**)
-- `GLOBAL_LLM_SERVICE` - On the **Overview** page of your project within **Project details**.
-- `AZURE_OPENAI_API_KEY` - On the **Overview** page of your project within **Project details**.
-- `AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME` - On the **Overview** page of your project within **Project details**.
-- `AZURE_OPENAI_CHAT_DEPLOYMENT_NAME` - On the **Overview** page of your project within **Project details**.
-- `PROJECT_CONNECTION_STRING` - On the **Overview** page of your project within **Project details**.
-- `AZURE_SEARCH_SERVICE_ENDPOINT` - On the **Overview** page of your project within **Project details**.
-- `AZURE_SEARCH_API_KEY` - On the **Overview** page of your project within **Project details**.
+```bash|powershell
+git clone --depth 1 --branch <branch-name> https://github.com/<your-username>/ai-agents-for-beginners.git
+```
 
-## Install Required Packages
+#### Partial (sparse) clone — minimal blobs + only selected folders
 
-To ensure you have all the required Python packages to run the code, run the following command in your terminal.
+This uses partial clone and sparse-checkout (requires Git 2.25+ and recommended modern Git with partial clone support):
 
-We recommend creating a Python virtual environment to avoid any conflicts and issues.
+```bash|powershell
+git clone --depth 1 --filter=blob:none --sparse https://github.com/<your-username>/ai-agents-for-beginners.git
+```
+
+Traverse into the repo folder:
+
+```bash|powershell
+cd ai-agents-for-beginners
+```
+
+Then specify which folders you want (example below shows two folders):
+
+```bash|powershell
+git sparse-checkout set 00-course-setup 01-intro-to-ai-agents
+```
+
+After cloning and verifying the files, if you only need files and want to free space (no git history), please delete the repository metadata (💀irreversible — you will lose all Git functionality: no commits, pulls, pushes, or history access).
 
 ```bash
+# zsh/bash
+rm -rf .git
+```
+
+```powershell
+# PowerShell
+Remove-Item -Recurse -Force .git
+```
+
+#### Using GitHub Codespaces (recommended to avoid local large downloads)
+
+- Create a new Codespace for this repo via the [GitHub UI](https://github.com/codespaces).  
+
+- In the terminal of the newly created codespace, run one of the shallow/sparse clone commands above to bring only the lesson folders you need into the Codespace workspace.
+- Optional: after cloning inside Codespaces, remove .git to reclaim extra space (see removal commands above).
+- Note: If you prefer to open the repo directly in Codespaces (without an extra clone), be aware Codespaces will construct the devcontainer environment and may still provision more than you need. Cloning a shallow copy inside a fresh Codespace gives you more control over disk usage.
+
+#### Tips
+
+- Always replace the clone URL with your fork if you want to edit/commit.
+- If you later need more history or files, you can fetch them or adjust sparse-checkout to include additional folders.
+
+## Running the Code
+
+This course offers a series of Jupyter Notebooks that you can run with to get hands-on experience building AI Agents.
+
+The code samples use **Microsoft Agent Framework (MAF)** with the `AzureAIProjectAgentProvider`, which connects to **Azure AI Agent Service V2** (the Responses API) through **Microsoft Foundry**.
+
+All Python notebooks are labelled `*-python-agent-framework.ipynb`.
+
+## Requirements
+
+- Python 3.12+
+  - **NOTE**: If you don't have Python3.12 installed, ensure you install it.  Then create your venv using python3.12 to ensure the correct versions are installed from the requirements.txt file.
+  
+    >Example
+
+    Create Python venv directory:
+
+    ```bash|powershell
+    python -m venv venv
+    ```
+
+    Then activate venv environment for:
+
+    ```bash
+    # zsh/bash
+    source venv/bin/activate
+    ```
+  
+    ```dos
+    # Command Prompt for Windows
+    venv\Scripts\activate
+    ```
+
+- .NET 10+: For the sample codes using .NET, ensure you install [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later. Then, check your installed .NET SDK version:
+
+    ```bash|powershell
+    dotnet --list-sdks
+    ```
+
+- **Azure CLI** — Required for authentication. Install from [aka.ms/installazurecli](https://aka.ms/installazurecli).
+- **Azure Subscription** — For access to Microsoft Foundry and Azure AI Agent Service.
+- **Microsoft Foundry Project** — A project with a deployed model (e.g., `gpt-4o`). See [Step 1](#step-1-create-a-microsoft-foundry-project) below.
+
+We have included a `requirements.txt` file in the root of this repository that contains all the required Python packages to run the code samples.
+
+You can install them by running the following command in your terminal at the root of the repository:
+
+```bash|powershell
 pip install -r requirements.txt
 ```
 
-This should install the required Python packages.
+We recommend creating a Python virtual environment to avoid any conflicts and issues.
 
-# Sign in to Azure
+## Setup VSCode
 
-As a security best practice, we'll use [keyless authentication](https://learn.microsoft.com/azure/developer/ai/keyless-connections?tabs=csharp%2Cazure-cli?WT.mc_id=academic-105485-koreyst) to authenticate to Azure OpenAI with Microsoft Entra ID. Before you can do so, you'll first need to install the **Azure CLI** per the [installation instructions](https://learn.microsoft.com/cli/azure/install-azure-cli?WT.mc_id=academic-105485-koreyst) for your operating system.
+Make sure that you are using the right version of Python in VSCode.
 
-Next, open a terminal and run `az login` to sign in to your Azure account.
+![image](https://github.com/user-attachments/assets/a85e776c-2edb-4331-ae5b-6bfdfb98ee0e)
 
-## Sign in to Azure
+## Set Up Microsoft Foundry and Azure AI Agent Service
 
-Login with your Azure AI account used to provision the Azure resources.
+### Step 1: Create a Microsoft Foundry Project
 
-Open a new terminal and enter the following command and follow the instructions in the terminal:
+You need an Azure AI Foundry **hub** and **project** with a deployed model to run the notebooks.
 
-`az login --use-device-code`
+1. Go to [ai.azure.com](https://ai.azure.com) and sign in with your Azure account.
+2. Create a **hub** (or use an existing one). See: [Hub resources overview](https://learn.microsoft.com/azure/ai-foundry/concepts/ai-resources).
+3. Inside the hub, create a **project**.
+4. Deploy a model (e.g., `gpt-4o`) from **Models + Endpoints** → **Deploy model**.
 
-Once you've logged in, select your subscription in the terminal.
+### Step 2: Retrieve Your Project Endpoint and Model Deployment Name
 
-## Access the environment variables.
+From your project in the Microsoft Foundry portal:
 
-We'll import `os` and `load_dotenv` so that you can access the environment variables.
+- **Project Endpoint** — Go to the **Overview** page and copy the endpoint URL.
 
-```python
-import os
-from dotenv import load_dotenv
+![Project Connection String](./images/project-endpoint.png)
 
-load_dotenv()
+- **Model Deployment Name** — Go to **Models + Endpoints**, select your deployed model, and note the **Deployment name** (e.g., `gpt-4o`).
+
+### Step 3: Sign in to Azure with `az login`
+
+All notebooks use **`AzureCliCredential`** for authentication — no API keys to manage. This requires you to be signed in via the Azure CLI.
+
+1. **Install the Azure CLI** if you haven't already: [aka.ms/installazurecli](https://aka.ms/installazurecli)
+
+2. **Sign in** by running:
+
+    ```bash|powershell
+    az login
+    ```
+
+    Or if you're in a remote/Codespace environment without a browser:
+
+    ```bash|powershell
+    az login --use-device-code
+    ```
+
+3. **Select your subscription** if prompted — choose the one containing your Foundry project.
+
+4. **Verify** you're signed in:
+
+    ```bash|powershell
+    az account show
+    ```
+
+> **Why `az login`?** The notebooks authenticate using `AzureCliCredential` from the `azure-identity` package. This means your Azure CLI session provides the credentials — no API keys or secrets in your `.env` file. This is a [security best practice](https://learn.microsoft.com/azure/developer/ai/keyless-connections).
+
+### Step 4: Create Your `.env` File
+
+Copy the example file:
+
+```bash
+# zsh/bash
+cp .env.example .env
 ```
 
-## Setup keyless authentication
-
-Rather than hardcode your credentials, we'll use a keyless connection with Azure OpenAI. To do so, we'll import `DefaultAzureCredential` and later call the `DefaultAzureCredential` function to get the credential.
-
-```python
-from azure.identity import DefaultAzureCredential, InteractiveBrowserCredential
+```powershell
+# PowerShell
+Copy-Item .env.example .env
 ```
 
-You are now ready to run the code of this course, happy learning more about the world of AI Agents!
+Open `.env` and fill in these two values:
+
+```env
+AZURE_AI_PROJECT_ENDPOINT=https://<your-project>.services.ai.azure.com/api/projects/<your-project-id>
+AZURE_AI_MODEL_DEPLOYMENT_NAME=gpt-4o
+```
+
+| Variable | Where to find it |
+|----------|-----------------|
+| `AZURE_AI_PROJECT_ENDPOINT` | Foundry portal → your project → **Overview** page |
+| `AZURE_AI_MODEL_DEPLOYMENT_NAME` | Foundry portal → **Models + Endpoints** → your deployed model's name |
+
+That's it for most lessons! The notebooks will authenticate automatically through your `az login` session.
+
+### Step 5: Install Python Dependencies
+
+```bash|powershell
+pip install -r requirements.txt
+```
+
+We recommend running this inside the virtual environment you created earlier.
+
+## Additional Setup for Lesson 5 (Agentic RAG)
+
+Lesson 5 uses **Azure AI Search** for retrieval-augmented generation. If you plan to run that lesson, add these variables to your `.env` file:
+
+| Variable | Where to find it |
+|----------|-----------------|
+| `AZURE_SEARCH_SERVICE_ENDPOINT` | Azure portal → your **Azure AI Search** resource → **Overview** → URL |
+| `AZURE_SEARCH_API_KEY` | Azure portal → your **Azure AI Search** resource → **Settings** → **Keys** → primary admin key |
+
+## Additional Setup for Lesson 6 and Lesson 8 (GitHub Models)
+
+Some notebooks in lessons 6 and 8 use **GitHub Models** instead of Azure AI Foundry. If you plan to run those samples, add these variables to your `.env` file:
+
+| Variable | Where to find it |
+|----------|-----------------|
+| `GITHUB_TOKEN` | GitHub → **Settings** → **Developer settings** → **Personal access tokens** |
+| `GITHUB_ENDPOINT` | Use `https://models.inference.ai.azure.com` (default value) |
+| `GITHUB_MODEL_ID` | Model name to use (e.g. `gpt-4o-mini`) |
+
+## Alternative Provider: MiniMax (OpenAI-Compatible)
+
+[MiniMax](https://platform.minimaxi.com/) provides large-context models (up to 204K tokens) through an OpenAI-compatible API. Since the Microsoft Agent Framework's `OpenAIChatClient` works with any OpenAI-compatible endpoint, you can use MiniMax as a drop-in alternative to GitHub Models or OpenAI.
+
+Add these variables to your `.env` file:
+
+| Variable | Where to find it |
+|----------|-----------------|
+| `MINIMAX_API_KEY` | [MiniMax Platform](https://platform.minimaxi.com/) → API Keys |
+| `MINIMAX_BASE_URL` | Use `https://api.minimax.io/v1` (default value) |
+| `MINIMAX_MODEL_ID` | Model name to use (e.g., `MiniMax-M2.7`) |
+
+**Available models**: `MiniMax-M2.7` (recommended), `MiniMax-M2.7-highspeed` (faster responses)
+
+The code samples that use `OpenAIChatClient` (e.g., Lesson 14 hotel booking workflow) will automatically detect and use your MiniMax configuration when `MINIMAX_API_KEY` is set.
+
+## Additional Setup for Lesson 8 (Bing Grounding Workflow)
+
+The conditional workflow notebook in lesson 8 uses **Bing grounding** via Azure AI Foundry. If you plan to run that sample, add this variable to your `.env` file:
+
+| Variable | Where to find it |
+|----------|-----------------|
+| `BING_CONNECTION_ID` | Azure AI Foundry portal → your project → **Management** → **Connected resources** → your Bing connection → copy the connection ID |
+
+## Troubleshooting
+
+### SSL Certificate Verification Errors on macOS
+
+If you are on macOS and encounter an error like:
+
+```plaintext
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain
+```
+
+This is a known issue with Python on macOS where the system SSL certificates are not automatically trusted. Try the following solutions in order:
+
+**Option 1: Run Python's Install Certificates script (recommended)**
+
+```bash
+# Replace 3.XX with your installed Python version (e.g., 3.12 or 3.13):
+/Applications/Python\ 3.XX/Install\ Certificates.command
+```
+
+**Option 2: Use `connection_verify=False` in your notebook (for GitHub Models notebooks only)**
+
+In the Lesson 6 notebook (`06-building-trustworthy-agents/code_samples/06-system-message-framework.ipynb`), a commented-out workaround is already included. Uncomment `connection_verify=False` when creating the client:
+
+```python
+client = ChatCompletionsClient(
+    endpoint=endpoint,
+    credential=AzureKeyCredential(token),
+    connection_verify=False,  # Disable SSL verification if you encounter certificate errors
+)
+```
+
+> **⚠️ Warning:** Disabling SSL verification (`connection_verify=False`) reduces security by skipping certificate validation. Use this only as a temporary workaround in development environments, never in production.
+
+**Option 3: Install and use `truststore`**
+
+```bash
+pip install truststore
+```
+
+Then add the following at the top of your notebook or script before making any network calls:
+
+```python
+import truststore
+truststore.inject_into_ssl()
+```
+
+## Stuck Somewhere?
 
 If you have any issues running this setup, hop into our <a href="https://discord.gg/kzRShWzttr" target="_blank">Azure AI Community Discord</a> or <a href="https://github.com/microsoft/ai-agents-for-beginners/issues?WT.mc_id=academic-105485-koreyst" target="_blank">create an issue</a>.
 
 ## Next Lesson
+
+You are now ready to run the code for this course. Happy learning more about the world of AI Agents! 
 
 [Introduction to AI Agents and Agent Use Cases](../01-intro-to-ai-agents/README.md)
